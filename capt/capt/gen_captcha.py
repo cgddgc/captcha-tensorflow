@@ -75,7 +75,7 @@ def __gen_and_save_image():
         uuid = uid.uuid1().hex
         image_name = '__%s__%s.png' % (text, uuid)
 
-        img_root = join(capt.cfg.workspace, 'train/')
+        img_root = join(capt.cfg.workspace, 'train')
         image_file = path.join(img_root, image_name)
         im.save(image_file)
 
@@ -98,5 +98,7 @@ def __demo_show_img():
 
 
 if __name__ == '__main__':
-    __gen_and_save_image()
-    pass
+    #__gen_and_save_image()
+    __demo_show_img()
+    #pass
+  

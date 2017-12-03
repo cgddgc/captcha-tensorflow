@@ -11,7 +11,6 @@ from capt.cnn_sys import crack_captcha_cnn, X, keep_prob
 from capt.gen_captcha import wrap_gen_captcha_text_and_image
 from capt.utils import convert2gray, vec2text
 
-
 def hack_function(sess, predict, captcha_image):
     """
     装载完成识别内容后，
@@ -28,6 +27,7 @@ def hack_function(sess, predict, captcha_image):
     for n in text:
         vector[i * CHAR_SET_LEN + n] = 1
         i += 1
+        #print(vector)
     return vec2text(vector)
 
 
@@ -43,7 +43,7 @@ def batch_hack_captcha():
 
     saver = tf.train.Saver()
     with tf.Session() as sess:
-        # saver = tf.train.import_meta_graph(save_model + ".meta")
+        #saver = tf.train.import_meta_graph(s_path)
         saver.restore(sess, tf.train.latest_checkpoint(model_path))
 
         stime = time.time()

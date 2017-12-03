@@ -67,15 +67,15 @@ def __gen_and_save_image():
     :return:
     """
 
-    for i in range(50000):
+    for i in range(5000):
         text, image = wrap_gen_captcha_text_and_image()
 
         im = Image.fromarray(image)
 
         uuid = uid.uuid1().hex
-        image_name = '__%s__%s.png' % (text, uuid)
-
-        img_root = join(capt.cfg.workspace, 'train/')
+        #image_name = '__%s__%s.png' % (text, uuid)
+        image_name = '%s.png' % (text)
+        img_root = join(capt.cfg.workspace, 'train')
         image_file = path.join(img_root, image_name)
         im.save(image_file)
 
@@ -99,4 +99,6 @@ def __demo_show_img():
 
 if __name__ == '__main__':
     __gen_and_save_image()
+    #__demo_show_img()
     pass
+  

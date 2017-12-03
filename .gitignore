@@ -7,3 +7,4 @@ MANIFEST
 build/
 #__init__.py
 work/
+vcode/

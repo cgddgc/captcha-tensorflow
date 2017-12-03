@@ -62,7 +62,31 @@ def convert2gray(img):
         return img
 
 
+
 def text2vec(text):
+    text_len = len(text)
+    if text_len > MAX_CAPTCHA:
+        raise ValueError('验证码最长4个字符')
+ 
+    vector = np.zeros(MAX_CAPTCHA*CHAR_SET_LEN)
+    def char2pos(c):
+        if c =='_':
+            k = 62
+            return k
+        k = ord(c)-48
+        if k > 9:
+            k = ord(c) - 55
+            if k > 35:
+                k = ord(c) - 61
+                if k > 61:
+                    raise ValueError('No Map') 
+        return k
+    for i, c in enumerate(text):
+        idx = i * CHAR_SET_LEN + char2pos(c)
+        vector[idx] = 1
+    return vector
+
+    """
     text_len = len(text)
     if text_len > MAX_CAPTCHA:
         raise ValueError('验证码最长4个字符')
@@ -73,21 +97,41 @@ def text2vec(text):
         idx = i * CHAR_SET_LEN + char2pos(c)
         vector[idx] = 1
     return vector
-
+"""
 
 # 向量转回文本
+"""
 def vec2text(vec):
     char_pos = vec.nonzero()[0]
+    #print(char_pos)
     text = []
     for i, c in enumerate(char_pos):
         char_at_pos = i  # c/63
         char_idx = c % CHAR_SET_LEN
-
         char_code = pos2char(char_idx)
-
+        #char_code = int(char_code)
         text.append(chr(char_code))
     return "".join(text)
+"""
 
+def vec2text(vec):
+    char_pos = vec.nonzero()[0]
+    text=[]
+    for i, c in enumerate(char_pos):
+        char_at_pos = i #c/63
+        char_idx = c % CHAR_SET_LEN
+        if char_idx < 10:
+            char_code = char_idx + ord('0')
+        elif char_idx <36:
+            char_code = char_idx - 10 + ord('A')
+        elif char_idx < 62:
+            char_code = char_idx-  36 + ord('a')
+        elif char_idx == 62:
+            char_code = ord('_')
+        else:
+            raise ValueError('error')
+        text.append(chr(char_code))
+    return "".join(text)
 
 """
 #向量（大小MAX_CAPTCHA*CHAR_SET_LEN）用0,1编码 每63个编码一个字符，这样顺利有，字符也有

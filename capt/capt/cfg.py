@@ -1,6 +1,5 @@
 # 验证码中的字符, 就不用汉字了
 from os.path import join
-
 number = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
 ALPHABET = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U',
             'V', 'W', 'X', 'Y', 'Z']
@@ -26,7 +25,7 @@ print('CHAR_SET_LEN:', CHAR_SET_LEN)
 home_root = "D:/gitrepos/captcha-tensorflow/"  # 在不同操作系统下面Home目录不一样
 workspace = join(home_root, "work/crack/y-capt-data/capt-python-36/")  # 用于工作的训练数据集
 model_path = join(home_root, "work/crack/model/")
-model_tag = 'crack_capcha.model/'
+model_tag = 'crack_capcha.model'
 save_model = join(model_path, model_tag)
 
 print("model_path:", save_model)

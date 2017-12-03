@@ -9,10 +9,7 @@ from capt.data_iter import get_next_batch
 
 
 def train_crack_captcha_cnn():
-    """
-    训练模型
-    :return:
-    """
+
     output = crack_captcha_cnn()
     predict = tf.reshape(output, [-1, MAX_CAPTCHA, CHAR_SET_LEN])  # 36行，4列
     label = tf.reshape(Y, [-1, MAX_CAPTCHA, CHAR_SET_LEN])
@@ -22,13 +19,13 @@ def train_crack_captcha_cnn():
     correct_pred = tf.equal(max_idx_p, max_idx_l)
 
     with tf.name_scope('my_monitor'):
-        loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=predict, labels=label))
-        # loss = tf.reduce_mean(tf.nn.sigmoid_cross_entropy_with_logits(logits=output, labels=Y))
+        #loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=predict, labels=label))
+        loss = tf.reduce_mean(tf.nn.sigmoid_cross_entropy_with_logits(logits=output, labels=Y))
     tf.summary.scalar('my_loss', loss)
     # 最后一层用来分类的softmax和sigmoid有什么不同？
 
     # optimizer 为了加快训练 learning_rate应该开始大，然后慢慢衰
-    optimizer = tf.train.AdamOptimizer(learning_rate=0.001).minimize(loss)
+    optimizer = tf.train.AdamOptimizer(learning_rate=0.0001).minimize(loss)
 
     with tf.name_scope('my_monitor'):
         accuracy = tf.reduce_mean(tf.cast(correct_pred, tf.float32))
@@ -49,7 +46,7 @@ def train_crack_captcha_cnn():
     step = 0
     while True:
         batch_x, batch_y = get_next_batch(64)  # 64
-        _, loss_ = sess.run([optimizer, loss], feed_dict={X: batch_x, Y: batch_y, keep_prob: 0.95})
+        _, loss_ = sess.run([optimizer, loss], feed_dict={X: batch_x, Y: batch_y, keep_prob: 0.98})
         print(step, 'loss:\t', loss_)
 
         step += 1
@@ -64,15 +61,15 @@ def train_crack_captcha_cnn():
 
         # 每50 step计算一次准确率，使用新生成的数据
         batch_x_test, batch_y_test = get_next_batch(256)  # 新生成的数据集个来做测试
-        acc = sess.run(accuracy, feed_dict={X: batch_x_test, Y: batch_y_test, keep_prob: 1.})
+        acc = sess.run(accuracy, feed_dict={X: batch_x_test, Y: batch_y_test, keep_prob: 1.0})
         print(step, 'acc---------------------------------\t', acc)
 
         # 终止条件
-        if acc > 0.98:
+        if acc > 0.99:
             break
 
         # 启用监控 tensor board
-        summary = sess.run(merged, feed_dict={X: batch_x_test, Y: batch_y_test, keep_prob: 1.})
+        summary = sess.run(merged, feed_dict={X: batch_x_test, Y: batch_y_test, keep_prob: 1.0})
         writer.add_summary(summary, step)
 
 
