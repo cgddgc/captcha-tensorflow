@@ -2,11 +2,11 @@
 参考文章：http://blog.topspeedsnail.com/archives/10858
 """
 import tensorflow as tf
-
-from capt.cfg import MAX_CAPTCHA, CHAR_SET_LEN, tb_log_path, save_model
-from capt.cnn_sys import crack_captcha_cnn, Y, keep_prob, X
-from capt.data_iter import get_next_batch
-
+import os,random
+from cfg import MAX_CAPTCHA, CHAR_SET_LEN, tb_log_path, save_model
+from cnn_sys import crack_captcha_cnn, Y, keep_prob, X
+from data_iter import get_next_batch,get_test_batch
+from train_set import train_data
 
 def train_crack_captcha_cnn():
 
@@ -45,14 +45,14 @@ def train_crack_captcha_cnn():
 
     step = 0
     while True:
-        batch_x, batch_y = get_next_batch(64)  # 64
-        _, loss_ = sess.run([optimizer, loss], feed_dict={X: batch_x, Y: batch_y, keep_prob: 0.98})
+        batch_x, batch_y = get_next_batch(100)  # 64
+        _, loss_ = sess.run([optimizer, loss], feed_dict={X: batch_x, Y: batch_y, keep_prob: 0.95})
         print(step, 'loss:\t', loss_)
 
         step += 1
 
         # 每2000步保存一次实验结果
-        if step % 2000 == 0:
+        if step % 1000 == 0:
             saver.save(sess, save_model, global_step=step)
 
         # 在测试集上计算精度
@@ -60,12 +60,12 @@ def train_crack_captcha_cnn():
             continue
 
         # 每50 step计算一次准确率，使用新生成的数据
-        batch_x_test, batch_y_test = get_next_batch(256)  # 新生成的数据集个来做测试
+        batch_x_test, batch_y_test = get_test_batch(300)  # 新生成的数据集个来做测试
         acc = sess.run(accuracy, feed_dict={X: batch_x_test, Y: batch_y_test, keep_prob: 1.0})
         print(step, 'acc---------------------------------\t', acc)
 
         # 终止条件
-        if acc > 0.99:
+        if acc > 0.95:
             break
 
         # 启用监控 tensor board
@@ -74,6 +74,9 @@ def train_crack_captcha_cnn():
 
 
 if __name__ == '__main__':
+    #td=train_data()
+    #td.get_text_img()
+    #td.ren(1293)
     train_crack_captcha_cnn()
     print('end')
     pass

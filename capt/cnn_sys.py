@@ -2,8 +2,8 @@
 网络结构
 """
 import tensorflow as tf
-
-from capt.cfg import IMAGE_HEIGHT, IMAGE_WIDTH, CHAR_SET_LEN, MAX_CAPTCHA
+import numpy as np
+from cfg import IMAGE_HEIGHT, IMAGE_WIDTH, CHAR_SET_LEN, MAX_CAPTCHA
 
 X = tf.placeholder(tf.float32, [None, IMAGE_HEIGHT * IMAGE_WIDTH])
 Y = tf.placeholder(tf.float32, [None, MAX_CAPTCHA * CHAR_SET_LEN])
@@ -19,17 +19,17 @@ def crack_captcha_cnn(w_alpha=0.01, b_alpha=0.1):
 
     x = tf.reshape(X, shape=[-1, IMAGE_HEIGHT, IMAGE_WIDTH, 1])
 
-    # w_c1_alpha = np.sqrt(2.0/(IMAGE_HEIGHT*IMAGE_WIDTH)) #
-    # w_c2_alpha = np.sqrt(2.0/(3*3*32))
-    # w_c3_alpha = np.sqrt(2.0/(3*3*64))
-    # w_d1_alpha = np.sqrt(2.0/(8*32*64))
-    # out_alpha = np.sqrt(2.0/1024)
+    #w_c1_alpha = np.sqrt(2.0/(IMAGE_HEIGHT*IMAGE_WIDTH)) #
+    #w_c2_alpha = np.sqrt(2.0/(3*3*32))
+    #w_c3_alpha = np.sqrt(2.0/(3*3*64))
+    #w_d1_alpha = np.sqrt(2.0/(8*32*64))
+    #out_alpha = np.sqrt(2.0/1024)
 
     # 3 conv layer
     w_c1 = tf.Variable(w_alpha * tf.random_normal([3, 3, 1, 32]))
     b_c1 = tf.Variable(b_alpha * tf.random_normal([32]))
-    conv11 = tf.nn.relu(tf.nn.bias_add(tf.nn.conv2d(x, w_c1, strides=[1, 1, 1, 1], padding='SAME'), b_c1))
-    conv12 = tf.nn.max_pool(conv11, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding='SAME')
+    conv12 = tf.nn.relu(tf.nn.bias_add(tf.nn.conv2d(x, w_c1, strides=[1, 1, 1, 1], padding='SAME'), b_c1))
+    conv12 = tf.nn.max_pool(conv12, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding='SAME')
     conv13 = tf.nn.dropout(conv12, keep_prob)
 
     w_c2 = tf.Variable(w_alpha * tf.random_normal([3, 3, 32, 64]))
@@ -45,17 +45,19 @@ def crack_captcha_cnn(w_alpha=0.01, b_alpha=0.1):
     conv33 = tf.nn.dropout(conv32, keep_prob)
 
     # Fully connected layer
-    w_d = tf.Variable(w_alpha * tf.random_normal([8 * 20 * 64, 1024]))
+    w_d = tf.Variable(w_alpha * tf.random_normal([8*20*64, 1024]))
     b_d = tf.Variable(b_alpha * tf.random_normal([1024]))
     dense = tf.reshape(conv33, [-1, w_d.get_shape().as_list()[0]])
+    #print(dense)
     dense = tf.nn.relu(tf.add(tf.matmul(dense, w_d), b_d))
     dense = tf.nn.dropout(dense, keep_prob)
 
     w_out = tf.Variable(w_alpha * tf.random_normal([1024, MAX_CAPTCHA * CHAR_SET_LEN]))
     b_out = tf.Variable(b_alpha * tf.random_normal([MAX_CAPTCHA * CHAR_SET_LEN]))
     out = tf.add(tf.matmul(dense, w_out), b_out)  # 36*4
-    # out = tf.reshape(out, (CHAR_SET_LEN, MAX_CAPTCHA))  # 重新变成4,36的形状
-    # out = tf.nn.softmax(out)
-    return out
+    #out = tf.reshape(out, (CHAR_SET_LEN, MAX_CAPTCHA))  # 重新变成4,36的形状
+    #out = tf.nn.softmax(out)
     #print(out)
-print(crack_captcha_cnn())
+    return out
+
+

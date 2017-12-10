@@ -1,3 +1,4 @@
+#coding=utf-8
 """
 专门做预测的
 """
@@ -6,10 +7,10 @@ import os
 import numpy as np
 import tensorflow as tf
 from PIL import Image
-from capt.cfg import MAX_CAPTCHA, CHAR_SET_LEN, model_path
-from capt.cnn_sys import crack_captcha_cnn, X, keep_prob
-from capt.gen_captcha import wrap_gen_captcha_text_and_image
-from capt.utils import convert2gray, vec2text
+from cfg import MAX_CAPTCHA, CHAR_SET_LEN, model_path
+from cnn_sys import crack_captcha_cnn, X, keep_prob
+from gen_captcha import wrap_gen_captcha_text_and_image
+from utils import convert2gray, vec2text
 
 def hack_function(sess, predict, captcha_image):
     """
@@ -47,7 +48,8 @@ def batch_hack_captcha():
         saver.restore(sess, tf.train.latest_checkpoint(model_path))
 
         stime = time.time()
-        imgpath="D:/gitrepos/captcha-tensorflow/work/crack/y-capt-data/capt-python-36/train"
+        #imgpath="D:/gitrepos/captcha-tensorflow/work/crack/y-capt-data/capt-python-36/train"
+        imgpath="E:/MyProjects/captcha-tensorflow/vcode1"
         imgs=os.listdir(imgpath)
         task_cnt = len(imgs)
         right_cnt = 0
@@ -60,6 +62,8 @@ def batch_hack_captcha():
             #img = tf.image.decode_png(img)
             #img = tf.image.convert_image_dtype(img, dtype=tf.uint8)
             img = Image.open(img)
+            img=img.convert("RGB")
+            img=img.resize((160,60),Image.ANTIALIAS)
             img=np.array(img)
             #print(img)
             image = convert2gray(img)

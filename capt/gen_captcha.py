@@ -1,4 +1,5 @@
-﻿import random
+#coding=utf-8
+import random
 from os import path
 from os.path import join
 
@@ -7,8 +8,7 @@ import numpy as np
 from PIL import Image
 from captcha.image import ImageCaptcha  # pip install captcha
 
-import capt
-from capt.cfg import gen_char_set
+from cfg import gen_char_set
 import uuid as uid
 
 # 验证码一般都无视大小写；验证码长度4个字符
@@ -98,7 +98,9 @@ def __demo_show_img():
 
 
 if __name__ == '__main__':
-    __gen_and_save_image()
+    #__gen_and_save_image()
     #__demo_show_img()
+    text,image=gen_captcha_text_and_image()
+    print(image.shape)
     pass
   

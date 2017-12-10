@@ -1,6 +1,6 @@
 import numpy as np
 
-from capt.cfg import MAX_CAPTCHA, CHAR_SET_LEN
+from cfg import MAX_CAPTCHA, CHAR_SET_LEN
 
 
 def char2pos(c):
