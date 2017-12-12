@@ -15,7 +15,7 @@ def get_next_batch(batch_size=128):
     :param batch_size:
     :return:
     """
-    imgpath="E:/MyProjects/captcha-tensorflow/vcode1/"
+    imgpath="D:/gitrepos/captcha-tensorflow/vcode1/"
     batch_x = np.zeros([batch_size, IMAGE_HEIGHT * IMAGE_WIDTH])
     batch_y = np.zeros([batch_size, MAX_CAPTCHA * CHAR_SET_LEN])
     td=train_data()
@@ -35,7 +35,7 @@ def get_test_batch(batch_size=500):
     :param batch_size:
     :return:
     """
-    imgpath="E:/MyProjects/captcha-tensorflow/test/"
+    imgpath="D:/gitrepos/captcha-tensorflow/test/"
     batch_x = np.zeros([batch_size, IMAGE_HEIGHT * IMAGE_WIDTH])
     batch_y = np.zeros([batch_size, MAX_CAPTCHA * CHAR_SET_LEN])
     td=train_data()

@@ -28,8 +28,8 @@ def crack_captcha_cnn(w_alpha=0.01, b_alpha=0.1):
     # 3 conv layer
     w_c1 = tf.Variable(w_alpha * tf.random_normal([3, 3, 1, 32]))
     b_c1 = tf.Variable(b_alpha * tf.random_normal([32]))
-    conv12 = tf.nn.relu(tf.nn.bias_add(tf.nn.conv2d(x, w_c1, strides=[1, 1, 1, 1], padding='SAME'), b_c1))
-    conv12 = tf.nn.max_pool(conv12, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding='SAME')
+    conv11 = tf.nn.relu(tf.nn.bias_add(tf.nn.conv2d(x, w_c1, strides=[1, 1, 1, 1], padding='SAME'), b_c1))
+    conv12 = tf.nn.max_pool(conv11, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding='SAME')
     conv13 = tf.nn.dropout(conv12, keep_prob)
 
     w_c2 = tf.Variable(w_alpha * tf.random_normal([3, 3, 32, 64]))
@@ -45,7 +45,7 @@ def crack_captcha_cnn(w_alpha=0.01, b_alpha=0.1):
     conv33 = tf.nn.dropout(conv32, keep_prob)
 
     # Fully connected layer
-    w_d = tf.Variable(w_alpha * tf.random_normal([8*20*64, 1024]))
+    w_d = tf.Variable(w_alpha * tf.random_normal([3*6*64, 1024]))
     b_d = tf.Variable(b_alpha * tf.random_normal([1024]))
     dense = tf.reshape(conv33, [-1, w_d.get_shape().as_list()[0]])
     #print(dense)

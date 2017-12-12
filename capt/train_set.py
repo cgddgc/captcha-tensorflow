@@ -2,14 +2,14 @@ import urllib.request,time,os,random
 from damatuWeb import DamatuApi
 from PIL import Image
 import numpy as np
-
+from cfg.py import dmtusr,dmtpwd
 class train_data():
 
     def __init__(self):
         pass
 
     def get_img(n):
-        imgpath="E:/MyProjects/captcha-tensorflow/vcode/"
+        imgpath="D:/gitrepos/captcha-tensorflow/vcode/"
         url = "https://jwxt.jnu.edu.cn/ValidateCode.aspx"
         i=0
         while(i<=n):
@@ -29,10 +29,10 @@ class train_data():
                 print(fname)
                 i+=1
 
-    def ren(self,n):
-        dmt=DamatuApi("cgddgc","cgd626723")
-        path1="E:/MyProjects/captcha-tensorflow/test/"
-        path2="E:/MyProjects/captcha-tensorflow/vcode2/"
+    def ren(self,n,dmtusr,dmtpwd):
+        dmt=DamatuApi(dmtusr,dmtpwd)
+        path1="D:/gitrepos/captcha-tensorflow/test/"
+        path2="D:/gitrepos/captcha-tensorflow/vcode/"
         err=0
         use=0
         for i in range(n):
@@ -69,13 +69,11 @@ class train_data():
         fname=imgpath+img
         im=Image.open(fname)
         im=im.convert("RGB")
-        im=im.resize((160,60),Image.ANTIALIAS)
+        
         #im.show()
         im=np.array(im)
         return code, im
-        #print(code,im)
-        #print(im.shape)
 if __name__=='__main__':
     td=train_data()
     #td.get_text_img()
-    td.ren(500)
+    td.ren(500,dmtusr,dmtpwd)

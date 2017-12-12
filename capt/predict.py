@@ -63,7 +63,7 @@ def batch_hack_captcha():
             #img = tf.image.convert_image_dtype(img, dtype=tf.uint8)
             img = Image.open(img)
             img=img.convert("RGB")
-            img=img.resize((160,60),Image.ANTIALIAS)
+            #img=img.resize((160,60),Image.ANTIALIAS)
             img=np.array(img)
             #print(img)
             image = convert2gray(img)

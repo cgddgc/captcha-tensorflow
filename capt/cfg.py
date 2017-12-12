@@ -8,14 +8,15 @@ alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n'
 
 gen_char_set = number + ALPHABET + alphabet  # 用于生成验证码的数据集
 # 有先后的顺序的
-
+dmtusr=""    #打码兔用户名
+dmtpwd=""    #打码兔登录密码
 # 图像大小
 #IMAGE_HEIGHT = 60
 #IMAGE_WIDTH = 160
 MAX_CAPTCHA = 4  # 一共是4位
 
-IMAGE_HEIGHT = 60#20
-IMAGE_WIDTH = 160#46
+IMAGE_HEIGHT = 20
+IMAGE_WIDTH = 46
 print("验证码文本最长字符数", MAX_CAPTCHA)  # 验证码最长4字符; 我全部固定为4,可以不固定. 如果验证码长度小于4，用'_'补齐
 
 # 文本转向量
